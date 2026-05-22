@@ -1419,7 +1419,32 @@ function updateNavDisabled() {
   nextBtn.disabled = (currentSlide === TOTAL_SLIDES - 1 && fragIndex >= fragCount);
 }
 
-function playTick() {} // Task 3에서 구현
+var _audioCtx = null;
+function getAudioCtx() {
+  if (_audioCtx) return _audioCtx;
+  var AC = window.AudioContext || window.webkitAudioContext;
+  if (!AC) return null;
+  try { _audioCtx = new AC(); } catch (e) { _audioCtx = null; }
+  return _audioCtx;
+}
+function playTick() {
+  if (!audioEnabled) return; // 오디오 토글과 연동
+  var ctx = getAudioCtx();
+  if (!ctx) return;
+  if (ctx.state === 'suspended') { ctx.resume().catch(function(){}); }
+  try {
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(880, ctx.currentTime); // page-turn·내레이션과 구별되는 짧고 높은 톤
+    gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.12, ctx.currentTime + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.12);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.13);
+  } catch (e) {}
+}
 function onFragmentRevealed(el) { // Task 6에서 차트 애니메이션 연결
   if (!el) return;
   el.setAttribute('tabindex', '-1');
