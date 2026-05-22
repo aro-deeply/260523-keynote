@@ -954,7 +954,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Noto San
         <span class="laugh-cap">정상 단어 음성</span>
       </button>
     </div>
-    <p class="laugh-reaction">
+    <p class="laugh-reaction fragment">
       &ldquo;선생님, AI도 실수를 하네요!&rdquo;<br>
       &ldquo;다음엔 꼭 실수 하나씩 넣어 주세요!&rdquo;
       <span class="quote-by">· 학생들의 반응</span>
@@ -1351,7 +1351,7 @@ function renderUsage(animate) {
 function renderHelped(animate) {
   var g = document.getElementById('chart-helped-bars');
   g.innerHTML = '';
-  var startY = 28, rowH = 48;
+  var startY = 24, rowH = 45;
   SURVEY.helped.forEach(function(d, i) {
     var y = startY + i * rowH;
     var w = helpedBarWidth(d.pct);
