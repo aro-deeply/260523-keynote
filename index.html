@@ -1289,6 +1289,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Noto San
 var allSlides = document.querySelectorAll('.slide');
 var TOTAL_SLIDES = allSlides.length;
 var currentSlide = -1;
+var fragIndex = 0; // 현재 슬라이드에서 드러난 fragment 개수
 var audioEnabled = true;
 var currentAudio = null;
 var currentNarration = null;
@@ -1354,8 +1355,21 @@ function playSfx(name) {
   } catch(e) {}
 }
 
-function goToSlide(n) {
+function slideFragments(slide) {
+  return slide.querySelectorAll('.fragment');
+}
+
+function setFragmentsVisible(slide, count) {
+  var frags = slideFragments(slide);
+  for (var i = 0; i < frags.length; i++) {
+    if (i < count) frags[i].classList.add('frag-visible');
+    else frags[i].classList.remove('frag-visible');
+  }
+}
+
+function goToSlide(n, opts) {
   if (n < 0 || n >= TOTAL_SLIDES || n === currentSlide) return;
+  opts = opts || {};
 
   if (currentSlide >= 0) {
     var oldSlide = allSlides[currentSlide];
@@ -1371,6 +1385,15 @@ function goToSlide(n) {
   newSlide.classList.add('active');
   newSlide.setAttribute('aria-hidden', 'false');
 
+  var fragCount = slideFragments(newSlide).length;
+  if (opts.revealAll) {
+    setFragmentsVisible(newSlide, fragCount);
+    fragIndex = fragCount;
+  } else {
+    setFragmentsVisible(newSlide, 0);
+    fragIndex = 0;
+  }
+
   counter.textContent = (n + 1) + ' / ' + TOTAL_SLIDES;
 
   var pct = ((n + 1) / TOTAL_SLIDES) * 100;
@@ -1380,8 +1403,7 @@ function goToSlide(n) {
   if (sfxName) playSfx(sfxName);
   playNarration(n);
 
-  prevBtn.disabled = (n === 0);
-  nextBtn.disabled = (n === TOTAL_SLIDES - 1);
+  updateNavDisabled();
 
   newSlide.scrollTop = 0;
 
@@ -1391,26 +1413,62 @@ function goToSlide(n) {
   try { focusTarget.focus({ preventScroll: true }); } catch(e) {}
 }
 
-prevBtn.addEventListener('click', function() { goToSlide(currentSlide - 1); });
-nextBtn.addEventListener('click', function() { goToSlide(currentSlide + 1); });
+function updateNavDisabled() {
+  var fragCount = slideFragments(allSlides[currentSlide]).length;
+  prevBtn.disabled = (currentSlide === 0 && fragIndex === 0);
+  nextBtn.disabled = (currentSlide === TOTAL_SLIDES - 1 && fragIndex >= fragCount);
+}
+
+function playTick() {} // Task 3에서 구현
+function onFragmentRevealed(el) { // Task 6에서 차트 애니메이션 연결
+  if (!el) return;
+  el.setAttribute('tabindex', '-1');
+  try { el.focus({ preventScroll: true }); } catch (e) {}
+}
+
+function advance() {
+  var slide = allSlides[currentSlide];
+  var fragCount = slideFragments(slide).length;
+  if (fragIndex < fragCount) {
+    var frag = slideFragments(slide)[fragIndex];
+    frag.classList.add('frag-visible');
+    fragIndex++;
+    playTick();
+    onFragmentRevealed(frag);
+    updateNavDisabled();
+  } else {
+    goToSlide(currentSlide + 1);
+  }
+}
+
+function retreat() {
+  if (fragIndex > 0) {
+    fragIndex--;
+    slideFragments(allSlides[currentSlide])[fragIndex].classList.remove('frag-visible');
+    updateNavDisabled();
+  } else {
+    goToSlide(currentSlide - 1, { revealAll: true });
+  }
+}
+
+prevBtn.addEventListener('click', function() { retreat(); });
+nextBtn.addEventListener('click', function() { advance(); });
 
 document.addEventListener('keydown', function(e) {
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
   if (e.target.tagName === 'BUTTON' && e.key === 'Enter') return;
   switch(e.key) {
     case 'ArrowRight':
-      e.preventDefault(); goToSlide(currentSlide + 1); break;
+    case 'PageDown':
+      e.preventDefault(); advance(); break;
     case 'ArrowLeft':
     case 'Backspace':
-      e.preventDefault(); goToSlide(currentSlide - 1); break;
+    case 'PageUp':
+      e.preventDefault(); retreat(); break;
     case 'Home':
       e.preventDefault(); goToSlide(0); break;
     case 'End':
-      e.preventDefault(); goToSlide(TOTAL_SLIDES - 1); break;
-    case 'PageDown':
-      e.preventDefault(); goToSlide(currentSlide + 1); break;
-    case 'PageUp':
-      e.preventDefault(); goToSlide(currentSlide - 1); break;
+      e.preventDefault(); goToSlide(TOTAL_SLIDES - 1, { revealAll: true }); break;
   }
 });
 
@@ -1441,8 +1499,8 @@ document.addEventListener('keydown', function(e) {
     if (Math.abs(dy) > SWIPE_MAX_OFF_AXIS) return;
     var tag = (e.target && e.target.tagName) || '';
     if (tag === 'A' || tag === 'BUTTON') return;
-    if (dx < 0) goToSlide(currentSlide + 1);
-    else goToSlide(currentSlide - 1);
+    if (dx < 0) advance();
+    else retreat();
   }, { passive: true });
 })();
 
