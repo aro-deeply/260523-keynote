@@ -1115,7 +1115,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Noto San
   <h2 class="sr-only">학생들의 평가 · 활용 희망과 도움 받은 영역</h2>
   <span class="eyebrow">학생들의 평가 ② · 활용 희망 + 도움 받은 영역</span>
   <div class="infographic-row" style="max-width:1100px; width:100%;">
-    <div class="info-card">
+    <div class="info-card fragment">
       <div class="info-title">앞으로도 미니게임을 활용했으면? (130명)</div>
       <svg class="info-svg" id="chart-usage" viewBox="0 0 420 230" role="img" aria-label="">
         <title>활용 희망 분포</title>
@@ -1129,7 +1129,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Noto San
       </svg>
     </div>
 
-    <div class="info-card">
+    <div class="info-card fragment">
       <div class="info-title">가장 도움 받은 영역 (복수 응답)</div>
       <svg class="info-svg" id="chart-helped" viewBox="0 0 420 230" role="img" aria-label="">
         <title>가장 도움 받은 영역</title>
@@ -1138,7 +1138,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Noto San
       </svg>
     </div>
   </div>
-  <p class="tagline" style="margin-top:2vh; max-width:900px;">
+  <p class="tagline fragment" style="margin-top:2vh; max-width:900px;">
     흥미와 학습 효과가 따로 가지 않고 <span style="color:#f5c842;">함께 올라감</span>
   </p>
 </section>
@@ -1367,6 +1367,67 @@ function renderHelped(animate) {
   document.getElementById('chart-helped').setAttribute('aria-label', '도움 받은 영역 가로 막대 그래프');
 }
 
+function prefersReducedMotion() {
+  return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+function animateCountUp(textEl) {
+  var target = parseFloat(textEl.getAttribute('data-count'));
+  var decimals = parseInt(textEl.getAttribute('data-decimals') || '0', 10);
+  if (prefersReducedMotion()) { textEl.textContent = target.toFixed(decimals); return; }
+  var dur = 800, start = null;
+  function frame(ts) {
+    if (start === null) start = ts;
+    var p = Math.min((ts - start) / dur, 1);
+    textEl.textContent = (target * p).toFixed(decimals);
+    if (p < 1) requestAnimationFrame(frame);
+    else textEl.textContent = target.toFixed(decimals);
+  }
+  requestAnimationFrame(frame);
+}
+
+function animateBars(containerId) {
+  var bars = document.querySelectorAll('#' + containerId + ' .chart-bar');
+  for (var i = 0; i < bars.length; i++) {
+    (function(bar) {
+      var w = parseFloat(bar.getAttribute('data-w'));
+      if (prefersReducedMotion()) { bar.setAttribute('width', w); return; }
+      bar.style.transition = 'none';
+      bar.setAttribute('width', 0);
+      requestAnimationFrame(function() {
+        bar.style.transition = 'width 0.6s ease-out';
+        bar.setAttribute('width', w);
+      });
+    })(bars[i]);
+  }
+}
+
+function animateDonut(arcsId) {
+  var arcs = document.querySelectorAll('#' + arcsId + ' circle');
+  for (var i = 0; i < arcs.length; i++) {
+    (function(c) {
+      var dash = parseFloat(c.getAttribute('data-dash'));
+      if (prefersReducedMotion()) { c.setAttribute('stroke-dasharray', dash + ' ' + DONUT_C); return; }
+      c.style.transition = 'none';
+      c.setAttribute('stroke-dasharray', '0 ' + DONUT_C);
+      requestAnimationFrame(function() {
+        c.style.transition = 'stroke-dasharray 0.7s ease-out';
+        c.setAttribute('stroke-dasharray', dash + ' ' + DONUT_C);
+      });
+    })(arcs[i]);
+  }
+}
+
+function animateChartsIn(root) {
+  if (root.querySelector('#chart-scores-bars')) {
+    animateBars('chart-scores-bars');
+    var sv = root.querySelectorAll('#chart-scores-bars text[data-count]');
+    for (var i = 0; i < sv.length; i++) animateCountUp(sv[i]);
+  }
+  if (root.querySelector('#chart-usage-arcs')) animateDonut('chart-usage-arcs');
+  if (root.querySelector('#chart-helped-bars')) animateBars('chart-helped-bars');
+}
+
 var NARRATION_DELAY_MS = 450;
 
 function pad2(n) { return (n < 10 ? '0' : '') + n; }
@@ -1455,6 +1516,21 @@ function goToSlide(n, opts) {
     fragIndex = 0;
   }
 
+  // S17: fragment가 없으니 진입 시 차트 애니메이트
+  if (newSlide.id === 'slide-17') animateChartsIn(newSlide);
+  // S18: 앞으로 진입 시 0폭으로 리셋(카드 등장 때 grow), 뒤로/reduced-motion 진입 시 최종 상태 보장
+  if (newSlide.id === 'slide-18') {
+    if (opts.revealAll || prefersReducedMotion()) {
+      renderUsage(false);
+      renderHelped(false);
+    } else {
+      var ub = newSlide.querySelectorAll('.chart-bar');
+      for (var bi = 0; bi < ub.length; bi++) ub[bi].setAttribute('width', 0);
+      var ua = newSlide.querySelectorAll('#chart-usage-arcs circle');
+      for (var ai = 0; ai < ua.length; ai++) ua[ai].setAttribute('stroke-dasharray', '0 ' + DONUT_C);
+    }
+  }
+
   counter.textContent = (n + 1) + ' / ' + TOTAL_SLIDES;
 
   var pct = ((n + 1) / TOTAL_SLIDES) * 100;
@@ -1506,8 +1582,11 @@ function playTick() {
     osc.stop(ctx.currentTime + 0.13);
   } catch (e) {}
 }
-function onFragmentRevealed(el) { // Task 6에서 차트 애니메이션 연결
+function onFragmentRevealed(el) {
   if (!el) return;
+  if (el.querySelector && (el.querySelector('#chart-usage-arcs') || el.querySelector('#chart-helped-bars'))) {
+    animateChartsIn(el);
+  }
   el.setAttribute('tabindex', '-1');
   try { el.focus({ preventScroll: true }); } catch (e) {}
 }
