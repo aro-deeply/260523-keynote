@@ -1093,9 +1093,9 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Noto San
   <h2 class="sr-only">학생들의 평가 평균 점수</h2>
   <div class="info-card" style="max-width:1100px; width:100%;">
     <div class="info-title">5점 만점 평균 (괄호 = 긍정 응답 4~5점 비율)</div>
-    <svg class="info-svg" viewBox="0 0 800 220" role="img" aria-label="만족도 4.35, 집중도 4.17, 학습 도움 3.94 가로 막대 그래프">
+    <svg class="info-svg" id="chart-scores" viewBox="0 0 800 220" role="img" aria-label="">
       <title>5점 만점 평균 점수</title>
-      <desc>전체 만족도 4.35점 긍정 85.4퍼센트, 집중도 4.17점 긍정 80.8퍼센트, 학습 도움 3.94점 긍정 72.3퍼센트</desc>
+      <desc id="chart-scores-desc"></desc>
       <line x1="180" y1="22" x2="780" y2="22" stroke="#30363d" stroke-width="1"/>
       <text x="180" y="15" fill="#8b949e" font-size="11" font-family="Noto Sans KR,sans-serif">0</text>
       <text x="300" y="15" fill="#8b949e" font-size="11" font-family="Noto Sans KR,sans-serif">1</text>
@@ -1103,26 +1103,8 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Noto San
       <text x="540" y="15" fill="#8b949e" font-size="11" font-family="Noto Sans KR,sans-serif">3</text>
       <text x="660" y="15" fill="#8b949e" font-size="11" font-family="Noto Sans KR,sans-serif">4</text>
       <text x="773" y="15" fill="#8b949e" font-size="11" font-family="Noto Sans KR,sans-serif">5</text>
-
-      <text x="0" y="62" fill="#e6edf3" font-size="18" font-family="Noto Sans KR,sans-serif" font-weight="500">전체 만족도</text>
-      <rect x="180" y="42" width="600" height="28" fill="#21262d" rx="5"/>
-      <rect x="180" y="42" width="522" height="28" fill="#f5c842" rx="5"/>
-      <text x="710" y="62" fill="#f5c842" font-size="18" font-family="Noto Sans KR,sans-serif" font-weight="900">4.35</text>
-      <text x="755" y="62" fill="#5de6c8" font-size="13" font-family="Noto Sans KR,sans-serif">(85.4%)</text>
-
-      <text x="0" y="118" fill="#e6edf3" font-size="18" font-family="Noto Sans KR,sans-serif" font-weight="500">집중도</text>
-      <rect x="180" y="98" width="600" height="28" fill="#21262d" rx="5"/>
-      <rect x="180" y="98" width="500" height="28" fill="#f5c842" rx="5"/>
-      <text x="688" y="118" fill="#f5c842" font-size="18" font-family="Noto Sans KR,sans-serif" font-weight="900">4.17</text>
-      <text x="733" y="118" fill="#5de6c8" font-size="13" font-family="Noto Sans KR,sans-serif">(80.8%)</text>
-
-      <text x="0" y="174" fill="#e6edf3" font-size="18" font-family="Noto Sans KR,sans-serif" font-weight="500">학습 도움</text>
-      <rect x="180" y="154" width="600" height="28" fill="#21262d" rx="5"/>
-      <rect x="180" y="154" width="473" height="28" fill="#f5c842" rx="5"/>
-      <text x="661" y="174" fill="#f5c842" font-size="18" font-family="Noto Sans KR,sans-serif" font-weight="900">3.94</text>
-      <text x="706" y="174" fill="#5de6c8" font-size="13" font-family="Noto Sans KR,sans-serif">(72.3%)</text>
-
-      <text x="400" y="210" text-anchor="middle" fill="#8b949e" font-size="12" font-family="Noto Sans KR,sans-serif">신명중학교 1학년 130명 · 2026년 5월</text>
+      <g id="chart-scores-bars"></g>
+      <text x="400" y="210" text-anchor="middle" fill="#8b949e" font-size="12" font-family="Noto Sans KR,sans-serif" id="chart-scores-foot"></text>
     </svg>
   </div>
 </section>
@@ -1135,67 +1117,24 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Noto San
   <div class="infographic-row" style="max-width:1100px; width:100%;">
     <div class="info-card">
       <div class="info-title">앞으로도 미니게임을 활용했으면? (130명)</div>
-      <svg class="info-svg" viewBox="0 0 420 230" role="img" aria-label="활용 희망 분포 · 줄였으면 0퍼센트">
+      <svg class="info-svg" id="chart-usage" viewBox="0 0 420 230" role="img" aria-label="">
         <title>활용 희망 분포</title>
-        <desc>더 자주 57.7%, 지금 정도 36.9%, 잘 모르겠어요 5.4%, 줄였으면 0%</desc>
+        <desc id="chart-usage-desc"></desc>
         <circle cx="110" cy="115" r="90" fill="none" stroke="#21262d" stroke-width="32"/>
-        <g transform="rotate(-90 110 115)">
-          <circle cx="110" cy="115" r="90" fill="none" stroke="#f5c842" stroke-width="32"
-            stroke-dasharray="326.286 565.487" stroke-dashoffset="0"/>
-          <circle cx="110" cy="115" r="90" fill="none" stroke="#5de6c8" stroke-width="32"
-            stroke-dasharray="208.665 565.487" stroke-dashoffset="-326.286"/>
-          <circle cx="110" cy="115" r="90" fill="none" stroke="#8b949e" stroke-width="32"
-            stroke-dasharray="30.536 565.487" stroke-dashoffset="-534.951"/>
-        </g>
-        <text x="110" y="108" text-anchor="middle" fill="#5de6c8" font-size="28" font-weight="900" font-family="Noto Sans KR,sans-serif">94.6%</text>
+        <g id="chart-usage-arcs" transform="rotate(-90 110 115)"></g>
+        <text id="chart-usage-center" x="110" y="108" text-anchor="middle" fill="#5de6c8" font-size="28" font-weight="900" font-family="Noto Sans KR,sans-serif"></text>
         <text x="110" y="130" text-anchor="middle" fill="#8b949e" font-size="11" font-family="Noto Sans KR,sans-serif">유지 또는 확대</text>
-
-        <g font-family="Noto Sans KR,sans-serif" font-size="12">
-          <rect x="225" y="40" width="14" height="14" fill="#f5c842" rx="2"/>
-          <text x="245" y="52" fill="#e6edf3">더 자주 <tspan fill="#f5c842" font-weight="700">57.7%</tspan></text>
-          <rect x="225" y="64" width="14" height="14" fill="#5de6c8" rx="2"/>
-          <text x="245" y="76" fill="#e6edf3">지금 정도 <tspan fill="#5de6c8" font-weight="700">36.9%</tspan></text>
-          <rect x="225" y="88" width="14" height="14" fill="#8b949e" rx="2"/>
-          <text x="245" y="100" fill="#e6edf3">잘 모르겠음 <tspan fill="#8b949e" font-weight="700">5.4%</tspan></text>
-        </g>
-        <g>
-          <rect x="225" y="125" width="180" height="60" rx="8" fill="rgba(255,107,138,0.12)" stroke="#ff6b8a" stroke-width="1.5"/>
-          <text x="315" y="148" text-anchor="middle" fill="#ff6b8a" font-size="13" font-weight="700" font-family="Noto Sans KR,sans-serif">줄였으면 좋겠어요</text>
-          <text x="315" y="170" text-anchor="middle" fill="#ff6b8a" font-size="22" font-weight="900" font-family="Noto Sans KR,sans-serif">0명</text>
-        </g>
+        <g id="chart-usage-legend" font-family="Noto Sans KR,sans-serif" font-size="12"></g>
+        <g id="chart-usage-zero"></g>
       </svg>
     </div>
 
     <div class="info-card">
       <div class="info-title">가장 도움 받은 영역 (복수 응답)</div>
-      <svg class="info-svg" viewBox="0 0 420 230" role="img" aria-label="도움 받은 영역 가로 막대 그래프">
+      <svg class="info-svg" id="chart-helped" viewBox="0 0 420 230" role="img" aria-label="">
         <title>가장 도움 받은 영역</title>
-        <desc>재미 53.8%, 단어 50.8%, 본문 독해 47.7%, 문법 37.7%, 발음 31.5%</desc>
-
-        <text x="0" y="28" fill="#e6edf3" font-size="13" font-family="Noto Sans KR,sans-serif">수업이 재미있어지는 데</text>
-        <rect x="0" y="36" width="290" height="16" fill="#21262d" rx="3"/>
-        <rect x="0" y="36" width="156" height="16" fill="#f5c842" rx="3"/>
-        <text x="296" y="48" fill="#f5c842" font-size="13" font-weight="700" font-family="Noto Sans KR,sans-serif">53.8%</text>
-
-        <text x="0" y="76" fill="#e6edf3" font-size="13" font-family="Noto Sans KR,sans-serif">단어 외우기</text>
-        <rect x="0" y="84" width="290" height="16" fill="#21262d" rx="3"/>
-        <rect x="0" y="84" width="147" height="16" fill="#5de6c8" rx="3"/>
-        <text x="296" y="96" fill="#5de6c8" font-size="13" font-weight="700" font-family="Noto Sans KR,sans-serif">50.8%</text>
-
-        <text x="0" y="124" fill="#e6edf3" font-size="13" font-family="Noto Sans KR,sans-serif">본문 독해</text>
-        <rect x="0" y="132" width="290" height="16" fill="#21262d" rx="3"/>
-        <rect x="0" y="132" width="138" height="16" fill="#5de6c8" rx="3"/>
-        <text x="296" y="144" fill="#5de6c8" font-size="13" font-weight="700" font-family="Noto Sans KR,sans-serif">47.7%</text>
-
-        <text x="0" y="172" fill="#e6edf3" font-size="13" font-family="Noto Sans KR,sans-serif">문법 이해</text>
-        <rect x="0" y="180" width="290" height="16" fill="#21262d" rx="3"/>
-        <rect x="0" y="180" width="109" height="16" fill="#a78bfa" rx="3"/>
-        <text x="296" y="192" fill="#a78bfa" font-size="13" font-weight="700" font-family="Noto Sans KR,sans-serif">37.7%</text>
-
-        <text x="0" y="220" fill="#e6edf3" font-size="13" font-family="Noto Sans KR,sans-serif">발음 듣기·익히기</text>
-        <rect x="180" y="208" width="110" height="16" fill="#21262d" rx="3"/>
-        <rect x="180" y="208" width="91" height="16" fill="#a78bfa" rx="3"/>
-        <text x="296" y="220" fill="#a78bfa" font-size="13" font-weight="700" font-family="Noto Sans KR,sans-serif">31.5%</text>
+        <desc id="chart-helped-desc"></desc>
+        <g id="chart-helped-bars"></g>
       </svg>
     </div>
   </div>
@@ -1305,6 +1244,128 @@ counter.textContent = '1 / ' + TOTAL_SLIDES;
 var SFX = {
   'page-turn': 'sfx/page-turn.mp3'
 };
+
+var SURVEY = {
+  scores: [
+    { label: '전체 만족도', avg: 4.35, positive: 85.4 },
+    { label: '집중도',     avg: 4.17, positive: 80.8 },
+    { label: '학습 도움',   avg: 3.94, positive: 72.3 }
+  ],
+  usage: [
+    { label: '더 자주',    pct: 57.7, color: '#f5c842' },
+    { label: '지금 정도',   pct: 36.9, color: '#5de6c8' },
+    { label: '잘 모르겠음', pct: 5.4,  color: '#8b949e' },
+    { label: '줄였으면',    pct: 0,    color: '#ff6b8a' }
+  ],
+  helped: [
+    { label: '수업이 재미있어지는 데', pct: 53.8, color: '#f5c842' },
+    { label: '단어 외우기',           pct: 50.8, color: '#5de6c8' },
+    { label: '본문 독해',             pct: 47.7, color: '#5de6c8' },
+    { label: '문법 이해',             pct: 37.7, color: '#a78bfa' },
+    { label: '발음 듣기·익히기',       pct: 31.5, color: '#a78bfa' }
+  ],
+  meta: { n: 130, school: '신명중학교 1학년', when: '2026년 5월' }
+};
+
+var SVGNS = 'http://www.w3.org/2000/svg';
+function scoreBarWidth(avg) { return avg / 5 * 600; }
+function helpedBarWidth(pct) { return pct / 100 * 290; }
+var DONUT_R = 90;
+var DONUT_C = 2 * Math.PI * DONUT_R;
+function donutSegments(segments) {
+  var out = [], cum = 0;
+  for (var i = 0; i < segments.length; i++) {
+    var dash = segments[i].pct / 100 * DONUT_C;
+    out.push({ color: segments[i].color, dash: dash, offset: -cum });
+    cum += dash;
+  }
+  return out;
+}
+
+function svgEl(tag, attrs, text) {
+  var el = document.createElementNS(SVGNS, tag);
+  for (var k in attrs) if (attrs.hasOwnProperty(k)) el.setAttribute(k, attrs[k]);
+  if (text != null) el.textContent = text;
+  return el;
+}
+var FONT = 'Noto Sans KR,sans-serif';
+
+function renderScores(animate) {
+  var g = document.getElementById('chart-scores-bars');
+  g.innerHTML = '';
+  var rows = [62, 118, 174];
+  var barY = [42, 98, 154];
+  SURVEY.scores.forEach(function(d, i) {
+    var w = scoreBarWidth(d.avg);
+    g.appendChild(svgEl('text', { x:0, y:rows[i], fill:'#e6edf3', 'font-size':18, 'font-family':FONT, 'font-weight':500 }, d.label));
+    g.appendChild(svgEl('rect', { x:180, y:barY[i], width:600, height:28, fill:'#21262d', rx:5 }));
+    var bar = svgEl('rect', { x:180, y:barY[i], width: animate ? 0 : w, height:28, fill:'#f5c842', rx:5 });
+    bar.setAttribute('data-w', w);
+    bar.setAttribute('class', 'chart-bar');
+    g.appendChild(bar);
+    var vx = 180 + w + 8;
+    var valText = svgEl('text', { x:vx, y:rows[i], fill:'#f5c842', 'font-size':18, 'font-family':FONT, 'font-weight':900 }, animate ? '0.00' : d.avg.toFixed(2));
+    valText.setAttribute('data-count', d.avg); valText.setAttribute('data-decimals', 2);
+    g.appendChild(valText);
+    g.appendChild(svgEl('text', { x:vx+45, y:rows[i], fill:'#5de6c8', 'font-size':13, 'font-family':FONT }, '('+d.positive.toFixed(1)+'%)'));
+  });
+  document.getElementById('chart-scores-foot').textContent = SURVEY.meta.school + ' ' + SURVEY.meta.n + '명 · ' + SURVEY.meta.when;
+  var desc = SURVEY.scores.map(function(d){ return d.label+' '+d.avg.toFixed(2)+'점 긍정 '+d.positive.toFixed(1)+'퍼센트'; }).join(', ');
+  document.getElementById('chart-scores-desc').textContent = desc;
+  document.getElementById('chart-scores').setAttribute('aria-label', desc);
+}
+
+function renderUsage(animate) {
+  var arcs = document.getElementById('chart-usage-arcs');
+  var legend = document.getElementById('chart-usage-legend');
+  var zero = document.getElementById('chart-usage-zero');
+  arcs.innerHTML = ''; legend.innerHTML = ''; zero.innerHTML = '';
+  var segs = donutSegments(SURVEY.usage);
+  SURVEY.usage.forEach(function(d, i) {
+    if (d.pct <= 0) return;
+    var c = svgEl('circle', { cx:110, cy:115, r:DONUT_R, fill:'none', stroke:d.color, 'stroke-width':32,
+      'stroke-dasharray': (animate ? 0 : segs[i].dash) + ' ' + DONUT_C, 'stroke-dashoffset': segs[i].offset });
+    c.setAttribute('data-dash', segs[i].dash);
+    arcs.appendChild(c);
+  });
+  var keep = SURVEY.usage[0].pct + SURVEY.usage[1].pct;
+  document.getElementById('chart-usage-center').textContent = keep.toFixed(1) + '%';
+  var ly = 52;
+  SURVEY.usage.forEach(function(d) {
+    if (d.pct <= 0) return;
+    legend.appendChild(svgEl('rect', { x:225, y:ly-12, width:14, height:14, fill:d.color, rx:2 }));
+    var t = svgEl('text', { x:245, y:ly, fill:'#e6edf3' }, d.label + ' ');
+    var ts = svgEl('tspan', { fill:d.color, 'font-weight':700 }, d.pct.toFixed(1) + '%');
+    t.appendChild(ts); legend.appendChild(t);
+    ly += 24;
+  });
+  var last = SURVEY.usage[SURVEY.usage.length - 1];
+  zero.appendChild(svgEl('rect', { x:225, y:125, width:180, height:60, rx:8, fill:'rgba(255,107,138,0.12)', stroke:'#ff6b8a', 'stroke-width':1.5 }));
+  zero.appendChild(svgEl('text', { x:315, y:148, 'text-anchor':'middle', fill:'#ff6b8a', 'font-size':13, 'font-weight':700, 'font-family':FONT }, last.label + ' 좋겠어요'));
+  zero.appendChild(svgEl('text', { x:315, y:170, 'text-anchor':'middle', fill:'#ff6b8a', 'font-size':22, 'font-weight':900, 'font-family':FONT }, '0명'));
+  var desc = SURVEY.usage.map(function(d){ return d.label+' '+d.pct.toFixed(1)+'%'; }).join(', ');
+  document.getElementById('chart-usage-desc').textContent = desc;
+  document.getElementById('chart-usage').setAttribute('aria-label', '활용 희망 분포 · ' + last.label + ' 0퍼센트');
+}
+
+function renderHelped(animate) {
+  var g = document.getElementById('chart-helped-bars');
+  g.innerHTML = '';
+  var startY = 28, rowH = 48;
+  SURVEY.helped.forEach(function(d, i) {
+    var y = startY + i * rowH;
+    var w = helpedBarWidth(d.pct);
+    g.appendChild(svgEl('text', { x:0, y:y, fill:'#e6edf3', 'font-size':13, 'font-family':FONT }, d.label));
+    g.appendChild(svgEl('rect', { x:0, y:y+8, width:290, height:16, fill:'#21262d', rx:3 }));
+    var bar = svgEl('rect', { x:0, y:y+8, width: animate ? 0 : w, height:16, fill:d.color, rx:3 });
+    bar.setAttribute('data-w', w); bar.setAttribute('class', 'chart-bar');
+    g.appendChild(bar);
+    g.appendChild(svgEl('text', { x:296, y:y+20, fill:d.color, 'font-size':13, 'font-weight':700, 'font-family':FONT }, d.pct.toFixed(1) + '%'));
+  });
+  var desc = SURVEY.helped.map(function(d){ return d.label+' '+d.pct.toFixed(1)+'%'; }).join(', ');
+  document.getElementById('chart-helped-desc').textContent = desc;
+  document.getElementById('chart-helped').setAttribute('aria-label', '도움 받은 영역 가로 막대 그래프');
+}
 
 var NARRATION_DELAY_MS = 450;
 
@@ -1566,6 +1627,9 @@ document.getElementById('btn-laugh-correct').addEventListener('keydown', functio
 for (var i = 0; i < allSlides.length; i++) {
   allSlides[i].setAttribute('aria-hidden', 'true');
 }
+renderScores(false);
+renderUsage(false);
+renderHelped(false);
 goToSlide(0);
 </script>
 
